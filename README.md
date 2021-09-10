@@ -15,6 +15,10 @@ Create a file called `config.json` with the username and password for your datab
 }
 ```
 
+The database url and collection name can be changed in `db/database.js`.
+
+Each document in the database has an `_id` that is set automatically when inserted, and also `title` and `content`.
+
 ## Run
 
 Use `npm start` to run.
