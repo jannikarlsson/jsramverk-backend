@@ -8,7 +8,8 @@ Install all dependencies using `npm install`.
 
 Create a file called `config.json` with the username and password for your database in this format:
 
-```{
+```
+{
     "username": "",
     "password": ""
 }
