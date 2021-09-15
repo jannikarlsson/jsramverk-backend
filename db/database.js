@@ -4,10 +4,11 @@ const collectionName = "savedDocs";
 
 const database = {
     getDb: async function getDb () {
-        let dsn = `mongodb+srv://${config.username}:${config.password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
-        if (process.env.NODE_ENV === 'test') {
-            dsn = "mongodb://localhost:27017/test";
+
+        let dsn = "mongodb://localhost:27017/test";
+        if (process.env.NODE_ENV !== "test") {
+           dsn = `mongodb+srv://${config.username}:${config.password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
         }
 
         const client  = await mongo.connect(dsn, {
