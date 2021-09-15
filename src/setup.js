@@ -3,10 +3,18 @@
  */
 "use strict";
 
-const config = require("./config.json");
+let config;
+try {
+    config = require('../config.json');
+} catch (error) {
+    console.error(error);
+}
+
+const username = process.env.username || config.username;
+const password = process.env.password || config.password;
 
 const mongo = require("mongodb").MongoClient;
-const dsn =  process.env.DBWEBB_DSN || `mongodb+srv://${config.username}:${config.password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const dsn =  process.env.DBWEBB_DSN || `mongodb+srv://${username}:${password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const fs = require("fs");
 const path = require("path");
