@@ -1,6 +1,16 @@
 const mongo = require("mongodb").MongoClient;
-const config = require("../config.json");
 const collectionName = "savedDocs";
+
+let config;
+try {
+    config = require('../config.json');
+} catch (error) {
+    console.error(error);
+}
+
+const username = process.env.username || config.username;
+const password = process.env.password || config.password;
+
 
 const database = {
     getDb: async function getDb () {
@@ -8,7 +18,7 @@ const database = {
 
         let dsn = "mongodb://localhost:27017/test";
         if (process.env.NODE_ENV !== "test") {
-           dsn = `mongodb+srv://${config.username}:${config.password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+           dsn = `mongodb+srv://${this.username}:${this.password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
         }
 
         const client  = await mongo.connect(dsn, {
