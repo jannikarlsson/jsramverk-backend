@@ -20,6 +20,7 @@ const database = {
         return {
             collection: collection,
             client: client,
+            db: db
         };
     }
 };

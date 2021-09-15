@@ -11,7 +11,7 @@ const docs = require('./routes/docs');
 app.use(cors());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(express.json())
+app.use(express.json());
 
 // don't show the log when it is test
 if (process.env.NODE_ENV !== 'test') {
@@ -35,6 +35,7 @@ app.use('/docs', docs);
 // Put this last
 app.use((req, res, next) => {
     var err = new Error("Not Found");
+
     err.status = 404;
     next(err);
 });
@@ -56,5 +57,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start up server
-app.listen(port, () => console.log(`Example API listening on port ${port}!`));
+const server = app.listen(port, () => console.log(`Example API listening on port ${port}!`));
 
+module.exports = server;
