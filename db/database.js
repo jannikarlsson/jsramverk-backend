@@ -18,7 +18,7 @@ const database = {
 
         let dsn = "mongodb://localhost:27017/test";
         if (process.env.NODE_ENV !== "test") {
-           dsn = `mongodb+srv://${this.username}:${this.password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+           dsn = `mongodb+srv://${username}:${password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
         }
 
         const client  = await mongo.connect(dsn, {
