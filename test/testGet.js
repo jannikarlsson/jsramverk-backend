@@ -51,6 +51,18 @@ describe('docs', () => {
         });
     });
 
+    // This should not work because the url is wrong
+    describe('GET /docs', () => {
+        it('should return 404', (done) => {
+            chai.request(server)
+                .get("/doc")
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    done();
+                });
+        });
+    });
+
     // Create new document in database
     describe('POST /docs:id', () => {
         it('should create a new document in the database', (done) => {
@@ -72,6 +84,8 @@ describe('docs', () => {
                     done();
                 });
         });
+
+        
         
         it('should edit a document in the database', (done) => {
             let doc = {
@@ -89,6 +103,7 @@ describe('docs', () => {
                     done();
                 });
         });
+        
     });
     // Test that get docs opens
     describe('GET /docs:id', () => {

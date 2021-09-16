@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/jannikarlsson/jsramverk-backend.svg?branch=master)](https://app.travis-ci.com/jannikarlsson/jsramverk-backend)
+
 API for reading, creating and changing documents in a MongoDB database.
 
 ## Install
