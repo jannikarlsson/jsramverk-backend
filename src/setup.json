@@ -1,10 +1,10 @@
 [
     {
-        "title": "Titel1",
-        "content": "<p>Test</p>"
+        "title": "En dikt av Werner Aspenström",
+        "content": "<p>När fantasin har ätit sig mätt på fantasier<br>växer hungern efter verkligt<br>Nu smakar stenhårt bröd igen<br>nu duger nästan stenar.</p>"
     },
     {
-        "title": "Titel2",
-        "content": "<p>Test2</p>"
+        "title": "En dikt av Gustaf Fröding",
+        "content": "<p>Var icke ledsen fast molnen trycka<br>och vinterköld genom hjärtat går,<br>Ty bakom moln glänsa sol och lycka<br>och efter vinter blir det åter vår.</p>"
     }
 ]

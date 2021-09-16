@@ -11,11 +11,12 @@ const server = require('../app.js');
 chai.should();
 
 const database = require("../db/database.js");
-const collectionName = "docs";
+const collectionName = "savedDocs";
 
 chai.use(chaiHttp);
 
 describe('docs', () => {
+    // Clears database before testing
     before(() => {
         return new Promise(async (resolve) => {
             const db = await database.getDb();
@@ -38,7 +39,7 @@ describe('docs', () => {
                 });
         });
     });
-    // Test that get docs opens
+    // Test that all the documents are returned as an array
     describe('GET /docs', () => {
         it('200 HAPPY PATH', (done) => {
             chai.request(server)
@@ -63,7 +64,7 @@ describe('docs', () => {
         });
     });
 
-    // Create new document in database
+    // Creates new document in database
     describe('POST /docs:id', () => {
         it('should create a new document in the database', (done) => {
             let doc = {
@@ -85,8 +86,7 @@ describe('docs', () => {
                 });
         });
 
-        
-        
+        // Edits a document in the database
         it('should edit a document in the database', (done) => {
             let doc = {
                 title: "Jannis uppdaterade titel",
@@ -103,15 +103,50 @@ describe('docs', () => {
                     done();
                 });
         });
+
+        //This edit should not work because the ID is invalid
+        it('should not edit a document in the database', (done) => {
+            let doc = {
+                title: "Jannis ouppdaterade titel",
+                content: "<p>Ouppdaterat innehåll</p>",
+            };
+            let fakeId = "34"
+
+            chai.request(server)
+                .post("/docs/" + fakeId)
+                .send(doc)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("string");
+                    res.body.should.equal("Error!");
+                    done();
+                });
+        });
         
     });
-    // Test that get docs opens
+    // Test that a single document opens
     describe('GET /docs:id', () => {
         it('opens edited document', (done) => {
             chai.request(server)
                 .get("/docs/" + this.id)
                 .end((err, res) => {
                     res.should.have.status(200);
+                    done();
+                });
+        });
+    });
+
+    // Try to open doc with fake ID, should not work
+    describe('GET /docs:id', () => {
+        it('opens edited document', (done) => {
+            let fakeId = "34"
+
+            chai.request(server)
+                .get("/docs/" + fakeId)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("string");
+                    res.body.should.equal("Error!");
                     done();
                 });
         });
