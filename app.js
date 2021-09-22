@@ -10,7 +10,8 @@ const port = process.env.PORT || 1337;
 
 const io = require("socket.io")(httpServer, {
   cors: {
-    origin: `http://localhost:4200`,
+    // origin: `http://localhost:4200`,
+    origin: `https://www.student.bth.se`,
     methods: ["GET", "POST"]
   }
 });
@@ -19,8 +20,11 @@ io.on("connect_error", (err) => {
  });
 
 io.sockets.on('connection', function(socket) {
+    let oldRoom;
     socket.on('create', function(room) {
+        socket.leave(oldRoom);
         socket.join(room);
+        oldRoom = room;
         console.log(`Rum ${room} öppet`)
     });
     socket.on("doc", function (data) {
