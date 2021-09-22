@@ -4,7 +4,29 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
 const app = express();
+const httpServer = require("http").createServer(app);
+
 const port = process.env.PORT || 1337;
+
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: `http://localhost:4200`,
+    methods: ["GET", "POST"]
+  }
+});
+io.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+ });
+
+io.sockets.on('connection', function(socket) {
+    socket.on('create', function(room) {
+        socket.join(room);
+        console.log(`Rum ${room} öppet`)
+    });
+    socket.on("doc", function (data) {
+        socket.to(data._id).emit("doc", data);
+    });
+});
 
 const docs = require('./routes/docs');
 
@@ -57,6 +79,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start up server
-const server = app.listen(port, () => console.log(`Example API listening on port ${port}!`));
-
+const server = httpServer.listen(port, () => {
+    console.log('Me and socket api listening on port ' + port);
+});
 module.exports = server;
