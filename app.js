@@ -21,6 +21,7 @@ io.on("connect_error", (err) => {
 
 io.sockets.on('connection', function(socket) {
     let oldRoom;
+    let throttleTimer;
     socket.on('create', function(room) {
         socket.leave(oldRoom);
         socket.join(room);
@@ -29,6 +30,10 @@ io.sockets.on('connection', function(socket) {
     });
     socket.on("doc", function (data) {
         socket.to(data._id).emit("doc", data);
+        clearTimeout(throttleTimer);
+        throttleTimer = setTimeout(function() {
+            
+        }, 2000);
     });
 });
 
