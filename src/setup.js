@@ -10,8 +10,8 @@ try {
     console.error(error);
 }
 
-// const username = process.env.username || config.username;
-// const password = process.env.password || config.password;
+const username = process.env.username || config.username;
+const password = process.env.password || config.password;
 
 const mongo = require("mongodb").MongoClient;
 const dsn =  process.env.DBWEBB_DSN || `mongodb+srv://${config.username}:${config.password}@cluster0.yyjqm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
