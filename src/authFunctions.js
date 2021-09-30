@@ -7,9 +7,18 @@ const collectionName = "users"
 
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
-const config = require('../secret.json');
+
+let secret;
+
+try {
+    config = require('../secret.json');
+} catch (error) {
+    console.error(error);
+}
+
+// const config = require('../secret.json');
 // const secret = config.secret;
-const secret = process.env.secret || config.secret;
+secret = process.env.secret || config.secret;
 
 const data = {
     // Return all documents in collection
