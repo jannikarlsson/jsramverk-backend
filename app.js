@@ -10,8 +10,8 @@ const port = process.env.PORT || 1337;
 
 const io = require("socket.io")(httpServer, {
   cors: {
-    // origin: `http://localhost:4200`,
-    origin: `https://www.student.bth.se`,
+    origin: `http://localhost:4200`,
+    // origin: `https://www.student.bth.se`,
     methods: ["GET", "POST"]
   }
 });
@@ -21,7 +21,6 @@ io.on("connect_error", (err) => {
 
 io.sockets.on('connection', function(socket) {
     let oldRoom;
-    let throttleTimer;
     socket.on('create', function(room) {
         socket.leave(oldRoom);
         socket.join(room);
@@ -30,14 +29,12 @@ io.sockets.on('connection', function(socket) {
     });
     socket.on("doc", function (data) {
         socket.to(data._id).emit("doc", data);
-        clearTimeout(throttleTimer);
-        throttleTimer = setTimeout(function() {
-            
-        }, 2000);
     });
 });
 
 const docs = require('./routes/docs');
+const auth = require('./routes/auth');
+
 
 app.use(cors());
 app.use(bodyParser.json()); // for parsing application/json
@@ -59,6 +56,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/docs', docs);
+app.use('/auth', auth);
 
 
 // Add routes for 404 and error handling

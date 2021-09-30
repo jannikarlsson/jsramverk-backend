@@ -22,13 +22,17 @@ const docs = JSON.parse(fs.readFileSync(
     path.resolve(__dirname, "setup.json"),
     "utf8"
 ));
-
-
+const users = JSON.parse(fs.readFileSync(
+    path.resolve(__dirname, "users.json"),
+    "utf8"
+));
 
 // Do it.
 resetCollection(dsn, "savedDocs", docs)
     .catch(err => console.log(err));
 
+resetCollection(dsn, "users", users)
+    .catch(err => console.log(err));
 
  /**
   * Reset a collection by removing existing content and insert a default

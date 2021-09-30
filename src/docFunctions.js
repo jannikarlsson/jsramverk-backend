@@ -1,14 +1,15 @@
 const database = require("../db/database.js");
 // const { ObjectId } = require('bson');
+const collectionName = "savedDocs"
 const { ObjectId } = require("mongodb");
 
 const data = {
     // Return all documents in collection
     findInCollection: async function run(criteria, projection, limit) {
 
-    const db = await database.getDb();
+    const db = await database.getDb(collectionName);
     const res = await db.collection.find(criteria, projection).limit(limit).toArray();
-
+    console.log(res);
     await db.client.close();
     return res;
     },
@@ -16,7 +17,7 @@ const data = {
 // Return single document based on ID
     getOne: async function run(id) {
         if (ObjectId.isValid(id)) {
-            const db = await database.getDb();
+            const db = await database.getDb(collectionName);
             const q = {_id: new ObjectId(id)};
             const res = await db.collection.find(q).toArray();
 
@@ -29,9 +30,9 @@ const data = {
 // Update contents of single document based on ID
     changeOne: async function run(id, data) {
         if (ObjectId.isValid(id)) {
-            const db = await database.getDb();
+            const db = await database.getDb(collectionName);
             const q = {_id: new ObjectId(id)};
-            const res = await db.collection.updateOne(q, {$set: {"title": data["title"], "content": data["content"]}});
+            const res = await db.collection.updateOne(q, {$set: {"title": data["title"], "content": data["content"], "permissions": data["permissions"]}});
 
             await db.client.close();
             return res;
@@ -42,7 +43,7 @@ const data = {
 // Save new document in collection
     sendToCollection: async function run(data) {
 
-    const db = await database.getDb();
+    const db = await database.getDb(collectionName);
     const res = await db.collection.insertOne(data)
 
     await db.client.close();
