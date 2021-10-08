@@ -2,9 +2,12 @@ const express = require("express");
 const cors = require('cors');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const { graphqlHTTP } = require('express-graphql');
 
 const app = express();
 const httpServer = require("http").createServer(app);
+const authFunctions = require("./src/authFunctions.js");
+
 
 const port = process.env.PORT || 1337;
 
@@ -58,6 +61,25 @@ app.use((req, res, next) => {
 app.use('/docs', docs);
 app.use('/auth', auth);
 
+// GraphQL
+
+const visual = false;
+const {
+  GraphQLSchema
+} = require("graphql");
+
+const Root = require("./graphql/root.js");
+
+const schema = new GraphQLSchema({
+    query: Root.RootQueryType
+});
+
+app.use('/graphql',
+    (request, response, next) => authFunctions.checkToken(request, response, next),
+    graphqlHTTP({
+    schema: schema,
+    graphiql: visual,
+}));
 
 // Add routes for 404 and error handling
 // Catch 404 and forward to error handler

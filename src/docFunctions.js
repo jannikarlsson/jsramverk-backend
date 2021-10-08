@@ -5,11 +5,10 @@ const { ObjectId } = require("mongodb");
 
 const data = {
     // Return all documents in collection
-    findInCollection: async function run(criteria, projection, limit) {
-
+    findInCollection: async function run(username) {
     const db = await database.getDb(collectionName);
-    const res = await db.collection.find(criteria, projection).limit(limit).toArray();
-    console.log(res);
+    const q = {permissions: username};
+    const res = await db.collection.find(q).toArray();
     await db.client.close();
     return res;
     },
@@ -22,7 +21,7 @@ const data = {
             const res = await db.collection.find(q).toArray();
 
             await db.client.close();
-            return res;
+            return res[0];
         }
         return "Error!";
     },

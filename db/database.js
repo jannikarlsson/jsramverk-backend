@@ -1,5 +1,4 @@
 const mongo = require("mongodb").MongoClient;
-// const collectionName = "savedDocs";
 
 let config;
 

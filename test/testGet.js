@@ -58,19 +58,19 @@ describe('docs', () => {
     //     });
     // });
 
-    // Test that all the users are returned as an array
-    describe('GET /auth', () => {
-        it('200 HAPPY PATH', (done) => {
-            chai.request(server)
-                .get("/auth")
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.an("array");
-                    console.log(res.body)
-                    done();
-                });
-        });
-    });
+    // // Test that all the users are returned as an array
+    // describe('GET /auth', () => {
+    //     it('200 HAPPY PATH', (done) => {
+    //         chai.request(server)
+    //             .get("/auth")
+    //             .end((err, res) => {
+    //                 res.should.have.status(200);
+    //                 res.body.should.be.an("array");
+    //                 console.log(res.body)
+    //                 done();
+    //             });
+    //     });
+    // });
 
     // Creates new user in database
     describe('POST /auth/register', () => {
@@ -109,19 +109,18 @@ describe('docs', () => {
         });
     });
 
-    // Test that all the documents are returned as an array
-    describe('GET /docs', () => {
-        it('200 HAPPY PATH', (done) => {
-            chai.request(server)
-                .get("/docs")
-                .set({ "x-access-token": this.token })
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.an("array");
-                    done();
-                });
-        });
-    });
+    // describe('POST /graphql', () => {
+    //     it('200 HAPPY PATH', (done) => {
+    //         chai.request(server)
+    //             .post("/graphql")
+    //             .send({ query: "{documents(username: 'janni@hej.se'){_id, title}}"})
+    //             .set({ "x-access-token": this.token })
+    //             .end((err, res) => {
+    //                 res.should.have.status(200);
+    //                 done();
+    //             });
+    //     });
+    // });
 
     // This should not work because the url is wrong
     describe('GET /docs', () => {
@@ -162,6 +161,7 @@ describe('docs', () => {
     });
 
     describe('POST /docs:id', () => {
+
         // Edits a document in the database
         it('should edit a document in the database', (done) => {
             let doc = {
@@ -208,31 +208,31 @@ describe('docs', () => {
         
     });
     // Test that a single document opens
-    describe('GET /docs:id', () => {
-        it('opens edited document', (done) => {
-            chai.request(server)
-                .get("/docs/" + this.id)
-                .set({ "x-access-token": this.token })
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    done();
-                });
-        });
-    });
+    // describe('GET /docs:id', () => {
+    //     it('opens edited document', (done) => {
+    //         chai.request(server)
+    //             .get("/docs/" + this.id)
+    //             .set({ "x-access-token": this.token })
+    //             .end((err, res) => {
+    //                 res.should.have.status(200);
+    //                 done();
+    //             });
+    //     });
+    // });
 
-    // Try to open doc with fake ID, should not work
-    describe('GET /docs:id', () => {
-        it('opens edited document', (done) => {
-            let fakeId = "34"
+    // // Try to open doc with fake ID, should not work
+    // describe('GET /docs:id', () => {
+    //     it('opens edited document', (done) => {
+    //         let fakeId = "34"
 
-            chai.request(server)
-                .get("/docs/" + fakeId)
-                .set({ "x-access-token": this.token })
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a("string");
-                    res.body.should.equal("Error!");
-                    done();
-                });
-        });
-    });
+    //         chai.request(server)
+    //             .get("/docs/" + fakeId)
+    //             .set({ "x-access-token": this.token })
+    //             .end((err, res) => {
+    //                 res.should.have.status(200);
+    //                 res.body.should.be.a("string");
+    //                 res.body.should.equal("Error!");
+    //                 done();
+    //             });
+    //     });
+    // });

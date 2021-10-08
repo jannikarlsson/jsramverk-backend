@@ -1,9 +1,7 @@
 const database = require("../db/database.js");
 const jwt = require('jsonwebtoken');
 
-// const { ObjectId } = require('bson');
 const collectionName = "users"
-// const { ObjectId } = require("mongodb");
 
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
@@ -16,16 +14,15 @@ try {
     console.error(error);
 }
 
-// const config = require('../secret.json');
-// const secret = config.secret;
 secret = process.env.secret || config.secret;
+// secret = config.secret;
 
 const data = {
     // Return all documents in collection
-    findInCollection: async function run(criteria, projection, limit) {
+    findInCollection: async function run() {
 
     const db = await database.getDb(collectionName);
-    const res = await db.collection.find(criteria, projection).limit(limit).toArray();
+    const res = await db.collection.find().toArray();
 
     await db.client.close();
     return res;
