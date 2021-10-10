@@ -113,7 +113,7 @@ describe('docs', () => {
     //     it('200 HAPPY PATH', (done) => {
     //         chai.request(server)
     //             .post("/graphql")
-    //             .send({ query: "{documents(username: 'janni@hej.se'){_id, title}}"})
+    //             .send({ query: "{documents(username: 'daniel.hansson@mau.se'){_id, title}}"})
     //             .set({ "x-access-token": this.token })
     //             .end((err, res) => {
     //                 res.should.have.status(200);
@@ -121,6 +121,21 @@ describe('docs', () => {
     //             });
     //     });
     // });
+
+// // Test that all the users are returned as an array
+    describe('POST /graphql', () => {
+        it('200 HAPPY PATH', (done) => {
+            chai.request(server)
+                .post("/graphql")
+                .send({ query: "{users{username, password}}"})
+                .set({ "x-access-token": this.token })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.an("object");
+                    done();
+                });
+        });
+    });
 
     // This should not work because the url is wrong
     describe('GET /docs', () => {

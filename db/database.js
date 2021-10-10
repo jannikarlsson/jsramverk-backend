@@ -8,10 +8,10 @@ try {
     console.error(error);
 }
 
-const username = process.env.username || config.username;
-const password = process.env.password || config.password;
-// const username = config.username;
-// const password = config.password;
+// const username = process.env.username || config.username;
+// const password = process.env.password || config.password;
+const username = config.username;
+const password = config.password;
 
 const database = {
     getDb: async function getDb (collectionName) {

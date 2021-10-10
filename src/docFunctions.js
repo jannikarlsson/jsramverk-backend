@@ -1,7 +1,7 @@
 const database = require("../db/database.js");
-// const { ObjectId } = require('bson');
 const collectionName = "savedDocs"
 const { ObjectId } = require("mongodb");
+var html_to_pdf = require('html-pdf-node');
 
 const data = {
     // Return all documents in collection
@@ -41,12 +41,19 @@ const data = {
 
 // Save new document in collection
     sendToCollection: async function run(data) {
-
     const db = await database.getDb(collectionName);
     const res = await db.collection.insertOne(data)
-
     await db.client.close();
     return res;
+    },
+
+    // Returns pdf buffer to frontend
+
+    printDoc: async function(data) {
+        let file = { content: "<h1>" + data.title + "</h1><p>" + data.content };
+        let options = { format: 'A4', margin: {top: '20mm', left: '15mm', right: '20mm', bottom: '20mm'}};
+        let pdf = await html_to_pdf.generatePdf(file, options)
+        return pdf;
     }
 };
 
