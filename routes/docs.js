@@ -13,17 +13,24 @@ const authFunctions = require("../src/authFunctions.js");
 //     response.json(res);
 // });
 
-// router.get("/:id", 
-//     (request, response, next) => authFunctions.checkToken(request, response, next),
-//     async function(request, response) {
-//     let res = await docFunctions.getOne(request.params.id);
-//     response.json(res);
-// });
+router.get("/:id", 
+    (request, response, next) => authFunctions.checkToken(request, response, next),
+    async function(request, response) {
+    let res = await docFunctions.getOne(request.params.id);
+    response.json(res);
+});
 
 router.post("/print", async (request, response) => {
     let res = await docFunctions.printDoc(request.body);
     response.json(res);
 });
+
+router.post("/comment", 
+    (request, response, next) => authFunctions.checkToken(request, response, next),
+    async (request, response) => {
+    let res = await docFunctions.saveComment(request.body);
+    response.json(res);
+})
 
 router.post("/", 
 (request, response, next) => authFunctions.checkToken(request, response, next),
@@ -35,11 +42,9 @@ async (request, response) => {
 router.post("/:id", 
     (request, response, next) => authFunctions.checkToken(request, response, next),
     async (request, response) => {
-        console.log("hi");
     let res = await docFunctions.changeOne(request.params.id, {title: request.body["title"], content: request.body["content"], permissions: request.body["permissions"]});
     response.json(res);
 });
-
 
 
 

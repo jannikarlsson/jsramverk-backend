@@ -39,6 +39,19 @@ const data = {
         return "Error!";
     },
 
+    // Saves comment
+    saveComment: async function run(data) {
+        if (ObjectId.isValid(data.id)) {
+            let id = data.id;
+            let commentData = {"text": data.text, "comment": data.comment, "user": data.user}
+            const db = await database.getDb(collectionName);
+            const q = {_id: new ObjectId(id)};
+            const res = await db.collection.updateOne(q, {$push: {"comments": commentData}});
+            await db.client.close();
+            return res;
+        }
+    },
+
 // Save new document in collection
     sendToCollection: async function run(data) {
     const db = await database.getDb(collectionName);
