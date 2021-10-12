@@ -1,10 +1,15 @@
 const database = require("../db/database.js");
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require("mongodb");
+
 
 const collectionName = "users"
 
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
+
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 let secret;
 
@@ -36,8 +41,8 @@ const data = {
             await db.client.close();
             return res;
         });
-        
-        
+
+
     },
 
     getOne: async function run(id) {
@@ -47,7 +52,7 @@ const data = {
         await db.client.close();
         return res[0];
     },
-    
+
     validate: function(response, user, password) {
         bcrypt.compare(password, user.password, function(err, result) {
             if (result) {
@@ -68,7 +73,8 @@ const data = {
     login: async function(response, data) {
         const exists = await this.getOne(data.username);
         if (exists) {
-            return this.validate(response, exists, data.password);     
+            // this.sendEmail();
+            return this.validate(response, exists, data.password);
         } else {
             return response.status(401).json({
                 errors: {
@@ -79,7 +85,7 @@ const data = {
                 }
             });;
         }
-        
+
     },
     checkToken: function (req, res, next) {
         const token = req.headers['x-access-token'];
@@ -91,6 +97,34 @@ const data = {
                 return next();
             }
         });
+    },
+
+    sendEmail: function (recipient, sender, documentTitle) {
+        const msg = {
+            to: recipient,
+            from: 'jannikarlsson@gmail.com',
+            subject: 'Du har bjudits in att redigera ' + documentTitle,
+            text: `Användaren ${sender} har bjudit in dig att redigera dokumentet ${documentTitle}. Här kan du logga in eller registrera ett konto för att komma igång och redigera: https://bit.ly/3iVxm2h.`,
+            html: `<p>Användaren ${sender} har bjudit in dig att redigera dokumentet ${documentTitle}.</p><p><a href="https://bit.ly/3iVxm2h">Här kan du logga in eller registrera ett konto för att komma igång och redigera</a></p>`,
+          }
+          sgMail
+            .send(msg)
+            .then(() => {
+              console.log('Email sent')
+            })
+            .catch((error) => {
+              console.error(error)
+            })
+    },
+
+    emailPermission: async function(data) {
+        console.log(data + "from emailpermissionfunktionen");
+        const db = await database.getDb("savedDocs");
+        const q = {_id: new ObjectId(data.id)};
+        const res = await db.collection.updateOne(q, {$push: {"permissions": data.email}});
+        await db.client.close();
+        this.sendEmail(data.email, data.sender, data.title);
+        return res;
     }
 };
 

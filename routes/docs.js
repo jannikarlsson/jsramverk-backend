@@ -25,6 +25,12 @@ router.post("/print", async (request, response) => {
     response.json(res);
 });
 
+router.post("/permission", async (request, response) => {
+    let res = await authFunctions.emailPermission(request.body);
+    console.log(request.body);
+    response.json(res);
+});
+
 router.post("/comment", 
     (request, response, next) => authFunctions.checkToken(request, response, next),
     async (request, response) => {
