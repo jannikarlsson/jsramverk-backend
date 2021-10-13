@@ -9,9 +9,15 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 let secret;
+let sendgrid;
+
+try {
+    sendgrid = require('../sendgrid.json');
+} catch (error) {
+    console.error(error);
+}
 
 try {
     config = require('../secret.json');
@@ -21,6 +27,9 @@ try {
 
 secret = process.env.secret || config.secret;
 // secret = config.secret;
+sendgrid_api = sendgrid.api;
+
+sgMail.setApiKey(sendgrid_api);
 
 const data = {
     // Return all documents in collection
