@@ -14,7 +14,7 @@ const DocType = new GraphQLObjectType({
         content: { type: GraphQLNonNull(GraphQLString) },
         owner: { type: GraphQLNonNull(GraphQLString) },
         permissions: { type: GraphQLList(GraphQLString)},
-        type: { type: GraphQLString}
+        type: { type: GraphQLString }
     })
 })
 

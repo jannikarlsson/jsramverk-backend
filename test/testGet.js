@@ -223,31 +223,31 @@ describe('docs', () => {
         
     });
     // Test that a single document opens
-    // describe('GET /docs:id', () => {
-    //     it('opens edited document', (done) => {
-    //         chai.request(server)
-    //             .get("/docs/" + this.id)
-    //             .set({ "x-access-token": this.token })
-    //             .end((err, res) => {
-    //                 res.should.have.status(200);
-    //                 done();
-    //             });
-    //     });
-    // });
+    describe('GET /docs:id', () => {
+        it('opens edited document', (done) => {
+            chai.request(server)
+                .get("/docs/" + this.id)
+                .set({ "x-access-token": this.token })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+    });
 
-    // // Try to open doc with fake ID, should not work
-    // describe('GET /docs:id', () => {
-    //     it('opens edited document', (done) => {
-    //         let fakeId = "34"
+    // Try to open doc with fake ID, should not work
+    describe('GET /docs:id', () => {
+        it('opens edited document', (done) => {
+            let fakeId = "34"
 
-    //         chai.request(server)
-    //             .get("/docs/" + fakeId)
-    //             .set({ "x-access-token": this.token })
-    //             .end((err, res) => {
-    //                 res.should.have.status(200);
-    //                 res.body.should.be.a("string");
-    //                 res.body.should.equal("Error!");
-    //                 done();
-    //             });
-    //     });
-    // });
+            chai.request(server)
+                .get("/docs/" + fakeId)
+                .set({ "x-access-token": this.token })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a("string");
+                    res.body.should.equal("Error!");
+                    done();
+                });
+        });
+    });
