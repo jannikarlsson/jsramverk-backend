@@ -27,7 +27,8 @@ try {
 
 secret = process.env.secret || config.secret;
 // secret = config.secret;
-sendgrid_api = sendgrid.api;
+sendgrid_api = process.env.sendgrid || sendgrid.api;
+// sendgrid_api = sendgrid.api;
 
 sgMail.setApiKey(sendgrid_api);
 
