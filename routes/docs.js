@@ -6,10 +6,11 @@ const authFunctions = require("../src/authFunctions.js");
 
 
 // Return a JSON object with list of all documents within the collection.
-// router.get("/", 
-// (request, response, next) => authFunctions.checkToken(request, response, next),
+// router.get("/:user", 
+// // (request, response, next) => authFunctions.checkToken(request, response, next),
 // async (request, response) => {
-//     let res = await docFunctions.findInCollection();
+//     let user = request.params.user;
+//     let res = await docFunctions.findInCollection(user);
 //     response.json(res);
 // });
 

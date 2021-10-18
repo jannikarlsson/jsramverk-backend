@@ -33,7 +33,7 @@ sendgrid_api = process.env.sendgrid || sendgrid.api;
 sgMail.setApiKey(sendgrid_api);
 
 const data = {
-    // Return all documents in collection
+    // Return all users in collection
     findInCollection: async function run() {
 
     const db = await database.getDb(collectionName);
@@ -101,9 +101,8 @@ const data = {
         const token = req.headers['x-access-token'];
         jwt.verify(token, secret, function(err, decoded) {
             if (err) {
-                console.log("TOKEN DOES NOT WORK")
+                return "Error"
             } else {
-                console.log("TOKEN WORKS")
                 return next();
             }
         });
@@ -128,7 +127,6 @@ const data = {
     },
 
     emailPermission: async function(data) {
-        console.log(data + "from emailpermissionfunktionen");
         const db = await database.getDb("savedDocs");
         const q = {_id: new ObjectId(data.id)};
         const res = await db.collection.updateOne(q, {$push: {"permissions": data.email}});

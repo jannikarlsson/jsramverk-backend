@@ -13,8 +13,8 @@ const port = process.env.PORT || 1337;
 
 const io = require("socket.io")(httpServer, {
   cors: {
-    // origin: `http://localhost:4200`,
-    origin: `https://www.student.bth.se`,
+    origin: `http://localhost:4200`,
+    // origin: `https://www.student.bth.se`,
     methods: ["GET", "POST"]
   }
 });

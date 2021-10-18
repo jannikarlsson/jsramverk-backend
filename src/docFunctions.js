@@ -63,7 +63,7 @@ const data = {
     // Returns pdf buffer to frontend
 
     printDoc: async function(data) {
-        let file = { content: "<h1>" + data.title + "</h1><p>" + data.content };
+        let file = { content: "<h1>" + data.title + "</h1>" + data.content };
         let options = { format: 'A4', margin: {top: '20mm', left: '15mm', right: '20mm', bottom: '20mm'}};
         let pdf = await html_to_pdf.generatePdf(file, options)
         return pdf;

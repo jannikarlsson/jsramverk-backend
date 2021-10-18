@@ -33,26 +33,26 @@ const RootQueryType = new GraphQLObjectType({
                 return await authFunctions.findInCollection();
             }
         },
-        singleDoc: {
-            type: DocType,
-            description: 'One document',
-            args: {
-                id: { type: GraphQLNonNull(GraphQLString) }
-            },
-            resolve: async function(parent, args) {
-                return await docFunctions.getOne(args.id)
-            }
-        },
-        singleUser: {
-            type: UserType,
-            description: 'One user',
-            args: {
-                username: { type: GraphQLNonNull(GraphQLString) }
-            },
-            resolve: async function(parent, args) {
-                return await authFunctions.getOne(args.username)
-            }
-        }
+        // singleDoc: {
+        //     type: DocType,
+        //     description: 'One document',
+        //     args: {
+        //         id: { type: GraphQLNonNull(GraphQLString) }
+        //     },
+        //     resolve: async function(parent, args) {
+        //         return await docFunctions.getOne(args.id)
+        //     }
+        // },
+        // singleUser: {
+        //     type: UserType,
+        //     description: 'One user',
+        //     args: {
+        //         username: { type: GraphQLNonNull(GraphQLString) }
+        //     },
+        //     resolve: async function(parent, args) {
+        //         return await authFunctions.getOne(args.username)
+        //     }
+        // }
     })
 });
 
