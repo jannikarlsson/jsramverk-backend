@@ -76,6 +76,15 @@ const data = {
                         token: jwtToken
                     }
                 });
+            } else {
+                return response.status(401).json({
+                    errors: {
+                        status: 401,
+                        source: "/login",
+                        title: "Wrong password",
+                        detail: "Dubbelkolla ditt lösenord."
+                    }
+                });;
             }
         });
     },
@@ -83,7 +92,6 @@ const data = {
     login: async function(response, data) {
         const exists = await this.getOne(data.username);
         if (exists) {
-            // this.sendEmail();
             return this.validate(response, exists, data.password);
         } else {
             return response.status(401).json({
@@ -91,7 +99,7 @@ const data = {
                     status: 401,
                     source: "/login",
                     title: "No such user",
-                    detail: "That username was not found."
+                    detail: "Dubbelkolla ditt användarnamn."
                 }
             });;
         }

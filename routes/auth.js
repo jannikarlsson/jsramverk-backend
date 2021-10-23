@@ -3,17 +3,6 @@ var router = express.Router();
 
 const authFunctions = require("../src/authFunctions.js");
 
-// Return a JSON object with list of all documents within the collection.
-// router.get("/", async (request, response) => {
-//     let res = await authFunctions.findInCollection({}, {}, 0);
-//     response.json(res);
-// });
-
-// router.get("/:user", async function(request, response) {
-//     let res = await authFunctions.getOne(request.params.user);
-//     response.json(res);
-// });
-
 router.post("/login", async (request, response) => {
     await authFunctions.login(response, request.body);
 });

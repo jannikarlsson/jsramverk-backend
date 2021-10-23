@@ -8,26 +8,14 @@ const setup = require("./setupTest.js")
 
 chai.use(chaiHttp);
 chai.should();
+var expect = chai.expect;
+
+let insertedId;
 
 describe('Get documents', () => {
     before(async () => {
         await setup.insertUser();
         await setup.insertDoc();
-    });
-
-    // Test that all the users are returned as an array
-    describe('POST /graphql', () => {
-        it('should return all users as an array', (done) => {
-            chai.request(server)
-                .post("/graphql")
-                .send({ query: "{users{username, password}}"})
-                .set({ "x-access-token": setup.token })
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.an("object");
-                    done();
-                });
-        });
     });
 
     // Test that a single document opens
@@ -38,6 +26,12 @@ describe('Get documents', () => {
                 .set({ "x-access-token": setup.token })
                 .end((err, res) => {
                     res.should.have.status(200);
+                    res.body._id.should.equal(setup.docId);
+                    expect(res.body.title).to.exist;
+                    expect(res.body.content).to.exist;
+                    expect(res.body.owner).to.exist;
+                    expect(res.body.type).to.exist;
+                    expect(res.body.permissions).to.exist;
                     done();
                 });
         });
@@ -77,34 +71,35 @@ describe('Get documents', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.an("object");
+                    res.body.matchedCount.should.equal(1);
                     res.body.modifiedCount.should.equal(1);
                     done();
                 });
         });
     });
 
-    // // Adds permission in the database
-    // describe('POST /docs/permission', () => {
-    //     it('should add permission to a document in the database and send email', (done) => {
-    //         let permission = {
-    //             id: setup.docId,
-    //             email: "fake@fake.fake",
-    //             title: "",
-    //             sender: ""
-    //         };
+    // Adds permission in the database
+    describe('POST /docs/permission', () => {
+        it('should add permission to a document in the database and send email', (done) => {
+            let permission = {
+                id: setup.docId,
+                email: "fake@fake.fake",
+                title: "",
+                sender: ""
+            };
 
-    //         chai.request(server)
-    //             .post("/docs/permission")
-    //             .send(permission)
-    //             .set({ "x-access-token": setup.token })
-    //             .end((err, res) => {
-    //                 res.should.have.status(200);
-    //                 res.body.should.be.an("object");
-    //                 res.body.modifiedCount.should.equal(1);
-    //                 done();
-    //             });
-    //     });
-    // });
+            chai.request(server)
+                .post("/docs/permission")
+                .send(permission)
+                .set({ "x-access-token": setup.token })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.an("object");
+                    res.body.modifiedCount.should.equal(1);
+                    done();
+                });
+        });
+    });
 
     // Print document to pdf
     describe('POST /docs/print', () => {
@@ -133,7 +128,8 @@ describe('Get documents', () => {
                 title: "Jannis testtitel",
                 content: "<p>Hello world!</p>",
                 owner: "testuser2",
-                permissions: ["testuser2"]
+                permissions: ["testuser2"],
+                type: "text"
             };
 
             chai.request(server)
@@ -144,6 +140,23 @@ describe('Get documents', () => {
                     res.should.have.status(200);
                     res.body.should.be.an("object");
                     res.body.should.have.property("insertedId");
+                    this.insertedId = res.body.insertedId;
+                    done();
+                });
+        });
+        // Test that the new document opens
+        it('opens the new document', (done) => {
+            chai.request(server)
+                .get("/docs/" + this.insertedId)
+                .set({ "x-access-token": setup.token })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body._id.should.equal(this.insertedId);
+                    res.body.content.should.equal("<p>Hello world!</p>");
+                    res.body.title.should.equal("Jannis testtitel");
+                    res.body.owner.should.equal("testuser2");
+                    res.body.permissions.should.include("testuser2");
+                    res.body.type.should.equal("text");
                     done();
                 });
         });
@@ -167,6 +180,18 @@ describe('Get documents', () => {
                     res.should.have.status(200);
                     res.body.should.be.an("object");
                     res.body.modifiedCount.should.equal(1);
+                    done();
+                });
+        });
+        // Test that the document now has comments
+        it('should find a comment', (done) => {
+            chai.request(server)
+                .get("/docs/" + setup.docId)
+                .set({ "x-access-token": setup.token })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body._id.should.equal(setup.docId);
+                    res.body.comments[0].should.include({text: "kommenterad text", comment: "kommentar", user: "testuser"});
                     done();
                 });
         });

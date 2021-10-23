@@ -16,6 +16,21 @@ describe('Get documents', () => {
         await setup.insertDoc();
     });
 
+        // Test that all the users are returned as an array
+        describe('POST /graphql', () => {
+            it('should return all users as an array', (done) => {
+                chai.request(server)
+                    .post("/graphql")
+                    .send({ query: "{users{username, password}}"})
+                    .set({ "x-access-token": setup.token })
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.an("object");
+                        done();
+                    });
+            });
+        });
+
     // Logs user in
 
     describe('POST /auth/login', () => {
@@ -70,6 +85,23 @@ describe('Get documents', () => {
                     res.should.have.status(200);
                     done();
                 });
+        });
+        describe('POST /auth/login', () => {
+            it('should log the new user in', (done) => {
+                let user = {
+                    username: "testuser2",
+                    password: "semester"
+                };
+    
+                chai.request(server)
+                    .post("/auth/login")
+                    .send(user)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.data.should.have.property("token");
+                        done();
+                    });
+            });
         });
     });
 
